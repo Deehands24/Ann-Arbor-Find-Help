@@ -1,2 +1,2 @@
 # Ann-Arbor-Find-Help
-Find or post gig work in Ann Arbor Michigan
+Find resources in Ann Arbor Michigan
