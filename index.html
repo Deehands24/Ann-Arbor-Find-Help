@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ann Arbor.help | Housing, Mental Health, & Food Resources</title>
+    <meta name="description" content="Your starting point for finding housing assistance, mental health support, food pantries, and basic needs resources in Ann Arbor, Michigan.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Animated gradient background */
+        .gradient-bg {
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #4facfe);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Category-specific gradients */
+        .housing-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #4facfe 100%);
+        }
+
+        .mental-gradient {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .needs-gradient {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .btn-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-transition:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .sponsored-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 3px solid #5a67d8;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sponsored-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .sponsored-card:hover::before {
+            left: 100%;
+        }
+
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+            border-color: #e5e7eb;
+        }
+
+        /* Pulse animation for crisis resources */
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+        }
+
+        .crisis-card {
+            animation: pulse-glow 2s infinite;
+        }
+
+        /* Icon animations */
+        .icon-bounce {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-transition:hover .icon-bounce {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        /* Badge styles */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Copy button animation */
+        @keyframes checkmark {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .copied {
+            animation: checkmark 0.3s ease;
+        }
+
+        /* Search bar glow */
+        .search-focus:focus {
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Smooth reveal animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Quick action buttons */
+        .quick-action {
+            transition: all 0.2s ease;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            background: #f3f4f6;
+            cursor: pointer;
+        }
+
+        .quick-action:hover {
+            background: #e5e7eb;
+            transform: scale(1.1);
+        }
+
+        /* Bookmark heart animation */
+        .bookmark-btn {
+            transition: all 0.2s ease;
+        }
+
+        .bookmark-btn.bookmarked {
+            color: #ef4444;
+            transform: scale(1.2);
+        }
+
+        /* Count badge */
+        .count-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+    <!-- Header with Gradient -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <h1 class="text-4xl sm:text-5xl font-extrabold">Ann Arbor.help</h1>
+            <p class="mt-3 text-lg sm:text-xl font-medium opacity-90">Find help with housing, mental health, and food in Ann Arbor.</p>
+            <p class="mt-2 text-sm sm:text-base opacity-75">📍 Connecting you to local resources that can help today</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+
+        <!-- Home Section (Main Navigation) -->
+        <section id="home-section" class="space-y-6 fade-in-up">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">What do you need help with?</h2>
+                <p class="text-lg text-gray-600">Choose a category to find resources in Ann Arbor</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Housing Card -->
+                <button onclick="showSection('housing-section')" class="btn-transition text-left p-8 bg-white rounded-xl shadow-lg border-2 border-transparent hover:border-blue-400 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-offset-2 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-100 rounded-full -mr-16 -mt-16 opacity-50 group-hover:scale-150 transition-transform duration-500"></div>
+                    <div class="relative">
+                        <div class="text-6xl mb-4 icon-bounce">🏠</div>
+                        <div class="count-badge housing-gradient mb-3">15 Resources</div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">Housing Help</h3>
+                        <p class="text-gray-600 leading-relaxed">Emergency shelters, tenant rights, affordable rentals, and utility assistance</p>
+                    </div>
+                </button>
+
+                <!-- Mental Health Card -->
+                <button onclick="showSection('mental-health-section')" class="btn-transition text-left p-8 bg-white rounded-xl shadow-lg border-2 border-transparent hover:border-green-400 focus:outline-none focus:ring-4 focus:ring-green-300 focus:ring-offset-2 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-green-100 rounded-full -mr-16 -mt-16 opacity-50 group-hover:scale-150 transition-transform duration-500"></div>
+                    <div class="relative">
+                        <div class="text-6xl mb-4 icon-bounce">🧠</div>
+                        <div class="count-badge mental-gradient mb-3">14 Resources</div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">Mental Health Resources</h3>
+                        <p class="text-gray-600 leading-relaxed">Crisis hotlines, therapists, support groups, and counseling services</p>
+                    </div>
+                </button>
+
+                <!-- Food & Basic Needs Card -->
+                <button onclick="showSection('needs-section')" class="btn-transition text-left p-8 bg-white rounded-xl shadow-lg border-2 border-transparent hover:border-pink-400 focus:outline-none focus:ring-4 focus:ring-pink-300 focus:ring-offset-2 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-pink-100 rounded-full -mr-16 -mt-16 opacity-50 group-hover:scale-150 transition-transform duration-500"></div>
+                    <div class="relative">
+                        <div class="text-6xl mb-4 icon-bounce">🍽️</div>
+                        <div class="count-badge needs-gradient mb-3">11 Resources</div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">Food & Basic Needs</h3>
+                        <p class="text-gray-600 leading-relaxed">Food pantries, SNAP assistance, clothing, and household goods</p>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Monetization: Featured Partners Section -->
+            <div class="mt-16 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-8 border-2 border-purple-200">
+                <div class="text-center mb-6">
+                    <span class="badge bg-purple-600 text-white">Featured Partners</span>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-3">Need Help Right Now?</h3>
+                    <p class="text-gray-600 mt-2">Our trusted partners are available 24/7</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Affiliate Slot 1 - BetterHelp -->
+                    <div class="sponsored-card text-white rounded-xl p-6 shadow-lg">
+                        <span class="badge bg-yellow-400 text-gray-900 mb-3">SPONSORED</span>
+                        <h4 class="text-xl font-bold mb-2">BetterHelp Online Therapy</h4>
+                        <p class="mb-4 opacity-90">Get matched with a licensed therapist in 48 hours. Flexible, affordable, confidential.</p>
+                        <a href="https://www.betterhelp.com" target="_blank" class="inline-block bg-white text-purple-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 btn-transition">
+                            Get Started Today →
+                        </a>
+                    </div>
+                    <!-- Affiliate Slot 2 - Add Your Own -->
+                    <div class="bg-white rounded-xl p-6 shadow-lg border-2 border-dashed border-purple-300">
+                        <span class="badge bg-gray-200 text-gray-700 mb-3">AD SPACE AVAILABLE</span>
+                        <h4 class="text-xl font-bold text-gray-900 mb-2">Your Service Here</h4>
+                        <p class="text-gray-600 mb-4">Contact us to feature your organization and help more people in Ann Arbor.</p>
+                        <div class="text-sm text-gray-500">Replace with your affiliate links in the code</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Housing Section -->
+        <section id="housing-section" class="hidden fade-in-up">
+            <button onclick="showSection('home-section')" class="mb-6 px-6 py-3 bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 rounded-lg font-semibold text-gray-700 btn-transition focus:outline-none focus:ring-2 focus:ring-gray-500 shadow-md">
+                ← Back to Home
+            </button>
+
+            <div class="housing-gradient text-white rounded-2xl p-8 mb-10 shadow-xl">
+                <h2 class="text-4xl sm:text-5xl font-extrabold mb-3">🏠 Housing Help</h2>
+                <p class="text-lg opacity-90">Emergency shelters, legal aid, affordable housing, and utility assistance</p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="mb-8">
+                <input
+                    type="text"
+                    id="housing-search"
+                    placeholder="🔍 Search housing resources..."
+                    class="w-full px-6 py-4 text-lg border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none search-focus transition-all"
+                    onkeyup="filterResources('housing')"
+                >
+            </div>
+
+            <!-- Monetization: Google AdSense Placeholder -->
+            <div class="mb-8 bg-gray-100 border-2 border-dashed border-gray-300 rounded-xl p-6 text-center">
+                <p class="text-sm text-gray-600 font-semibold">📊 Google AdSense Ad Slot</p>
+                <p class="text-xs text-gray-500 mt-1">Replace this div with your AdSense code</p>
+                <code class="text-xs bg-white px-2 py-1 rounded mt-2 inline-block">ins class="adsbygoogle"</code>
+            </div>
+
+            <!-- Emergency Shelters -->
+            <div class="mb-10">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4 pb-2 border-b-2 border-blue-500">Emergency Shelters</h3>
+                <div id="shelters-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+
+            <!-- Tenant Rights & Legal Aid -->
+            <div class="mb-10">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4 pb-2 border-b-2 border-blue-500">Tenant Rights & Legal Aid</h3>
+                <div id="legal-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+
+            <!-- Find Affordable Rentals -->
+            <div class="mb-10">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4 pb-2 border-b-2 border-blue-500">Find Affordable Rentals</h3>
+                <div id="rentals-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+
+            <!-- Utility Assistance -->
+            <div class="mb-10">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4 pb-2 border-b-2 border-blue-500">Utility Assistance</h3>
+                <div id="utilities-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+        </section>
+
+        <!-- Mental Health Section -->
+        <section id="mental-health-section" class="hidden fade-in-up">
+            <button onclick="showSection('home-section')" class="mb-6 px-6 py-3 bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 rounded-lg font-semibold text-gray-700 btn-transition focus:outline-none focus:ring-2 focus:ring-gray-500 shadow-md">
+                ← Back to Home
+            </button>
+
+            <div class="mental-gradient text-white rounded-2xl p-8 mb-10 shadow-xl">
+                <h2 class="text-4xl sm:text-5xl font-extrabold mb-3">🧠 Mental Health Resources</h2>
+                <p class="text-lg opacity-90">Crisis support, therapy, support groups, and counseling services</p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="mb-8">
+                <input
+                    type="text"
+                    id="mental-health-search"
+                    placeholder="🔍 Search mental health resources..."
+                    class="w-full px-6 py-4 text-lg border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none search-focus transition-all"
+                    onkeyup="filterResources('mental-health')"
+                >
+            </div>
+
+            <!-- Crisis & Emergency Hotlines -->
+            <div class="mb-10">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4 pb-2 border-b-2 border-green-500">Crisis & Emergency Hotlines</h3>
+                <div id="crisis-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+
+            <!-- Find a Therapist -->
+            <div class="mb-10">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4 pb-2 border-b-2 border-green-500">Find a Therapist</h3>
+                <div id="therapist-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+
+            <!-- Support Groups -->
+            <div class="mb-10">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4 pb-2 border-b-2 border-green-500">Support Groups</h3>
+                <div id="support-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+
+            <!-- University of Michigan Resources -->
+            <div class="mb-10">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4 pb-2 border-b-2 border-green-500">University of Michigan Resources</h3>
+                <div id="umich-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+        </section>
+
+        <!-- Food & Basic Needs Section -->
+        <section id="needs-section" class="hidden fade-in-up">
+            <button onclick="showSection('home-section')" class="mb-6 px-6 py-3 bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 rounded-lg font-semibold text-gray-700 btn-transition focus:outline-none focus:ring-2 focus:ring-gray-500 shadow-md">
+                ← Back to Home
+            </button>
+
+            <div class="needs-gradient text-white rounded-2xl p-8 mb-10 shadow-xl">
+                <h2 class="text-4xl sm:text-5xl font-extrabold mb-3">🍽️ Food & Basic Needs</h2>
+                <p class="text-lg opacity-90">Food pantries, SNAP/WIC assistance, clothing, and household goods</p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="mb-8">
+                <input
+                    type="text"
+                    id="needs-search"
+                    placeholder="🔍 Search food & basic needs resources..."
+                    class="w-full px-6 py-4 text-lg border-2 border-gray-300 rounded-xl focus:border-pink-500 focus:outline-none search-focus transition-all"
+                    onkeyup="filterResources('needs')"
+                >
+            </div>
+
+            <!-- Food Pantries & Soup Kitchens -->
+            <div class="mb-10">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4 pb-2 border-b-2 border-orange-500">Food Pantries & Soup Kitchens</h3>
+                <div id="food-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+
+            <!-- SNAP & WIC Assistance -->
+            <div class="mb-10">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4 pb-2 border-b-2 border-orange-500">SNAP & WIC Assistance</h3>
+                <div id="snap-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+
+            <!-- Clothing & Household Goods -->
+            <div class="mb-10">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4 pb-2 border-b-2 border-orange-500">Clothing & Household Goods</h3>
+                <div id="clothing-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <p class="text-center text-gray-600">&copy; 2025 Ann Arbor.help - Connecting you to local resources</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Resource Data
+        const resources = {
+            housing: {
+                shelters: [
+                    {
+                        name: "Shelter Association of Washtenaw County",
+                        desc: "Emergency shelter and supportive services for individuals and families experiencing homelessness.",
+                        website: "https://www.shelterassociation.org",
+                        phone: "(734) 662-6362",
+                        address: "421 W Huron St, Ann Arbor, MI 48103"
+                    },
+                    {
+                        name: "Delonis Center",
+                        desc: "Year-round emergency shelter with meals, housing support, and case management services.",
+                        website: "https://www.shelterassociation.org/delonis-center",
+                        phone: "(734) 662-6362",
+                        address: "312 W Huron St, Ann Arbor, MI 48103"
+                    },
+                    {
+                        name: "Safe House Center",
+                        desc: "Emergency shelter and support services for survivors of domestic violence and sexual assault.",
+                        website: "https://www.safehousecenter.org",
+                        phone: "(734) 995-5444",
+                        address: "Confidential Location"
+                    },
+                    {
+                        name: "Ozone House",
+                        desc: "Emergency and transitional housing for youth experiencing homelessness or family crisis.",
+                        website: "https://www.ozonehouse.org",
+                        phone: "(734) 662-2222",
+                        address: "1705 Washtenaw Ave, Ann Arbor, MI 48104"
+                    }
+                ],
+                legal: [
+                    {
+                        name: "Legal Services of South Central Michigan",
+                        desc: "Free civil legal assistance for low-income residents including housing and eviction defense.",
+                        website: "https://www.lsscm.org",
+                        phone: "(734) 665-6181",
+                        address: "420 N 4th Ave, Ann Arbor, MI 48104"
+                    },
+                    {
+                        name: "University of Michigan Student Legal Services",
+                        desc: "Free legal advice for U-M students on housing, landlord-tenant issues, and contracts.",
+                        website: "https://studentlegalservices.umich.edu",
+                        phone: "(734) 763-9920",
+                        address: "4015 Michigan Union, Ann Arbor, MI 48109"
+                    },
+                    {
+                        name: "Michigan Poverty Law Program",
+                        desc: "Legal advocacy and representation for low-income individuals facing housing issues.",
+                        website: "https://www.mplp.org",
+                        phone: "(734) 998-6100",
+                        address: "1980 W Stadium Blvd, Ann Arbor, MI 48103"
+                    }
+                ],
+                rentals: [
+                    {
+                        name: "Washtenaw Housing Alliance",
+                        desc: "Connects individuals with affordable housing opportunities and rental assistance programs.",
+                        website: "https://www.washtenawhousing.org",
+                        phone: "(734) 663-5222",
+                        address: "555 Towner St, Ypsilanti, MI 48198"
+                    },
+                    {
+                        name: "Ann Arbor Housing Commission",
+                        desc: "Public housing and Section 8 Housing Choice Voucher programs for low-income families.",
+                        website: "https://www.a2gov.org/housing",
+                        phone: "(734) 794-6721",
+                        address: "2000 S Industrial Hwy, Ann Arbor, MI 48104"
+                    },
+                    {
+                        name: "Community Action Network",
+                        desc: "Affordable housing search assistance and financial literacy programs for renters.",
+                        website: "https://www.canwashtenaw.org",
+                        phone: "(734) 971-9781",
+                        address: "123 W Michigan Ave, Ypsilanti, MI 48197"
+                    }
+                ],
+                utilities: [
+                    {
+                        name: "DTE Energy Assistance",
+                        desc: "Financial assistance programs for gas and electric bills, including MEAP and shutoff protection.",
+                        website: "https://www.dteenergy.com/assistance",
+                        phone: "1-800-477-4747",
+                        address: "Apply online or by phone"
+                    },
+                    {
+                        name: "Washtenaw County Community Action",
+                        desc: "Emergency utility assistance and weatherization programs for low-income households.",
+                        website: "https://www.wccaa.org",
+                        phone: "(734) 544-3030",
+                        address: "555 Towner St, Ypsilanti, MI 48198"
+                    },
+                    {
+                        name: "Salvation Army - Ann Arbor",
+                        desc: "Emergency assistance with utility bills, rent, and other basic needs.",
+                        website: "https://www.salvationarmywashtenaw.org",
+                        phone: "(734) 572-3060",
+                        address: "100 E Michigan Ave, Ypsilanti, MI 48198"
+                    },
+                    {
+                        name: "Low Income Home Energy Assistance (LIHEAP)",
+                        desc: "Federal program providing heating and cooling assistance for qualifying households.",
+                        website: "https://www.michigan.gov/mdhhs/liheap",
+                        phone: "1-855-275-6424",
+                        address: "Apply through local MDHHS office"
+                    }
+                ]
+            },
+            mentalHealth: {
+                sponsored: [
+                    {
+                        name: "BetterHelp (Sponsored)",
+                        desc: "Online therapy with licensed professionals. Get matched with a therapist today - convenient and confidential.",
+                        website: "https://www.betterhelp.com",
+                        phone: "",
+                        address: "Online Service",
+                        isSponsored: true
+                    }
+                ],
+                crisis: [
+                    {
+                        name: "988 Suicide & Crisis Lifeline",
+                        desc: "24/7 free and confidential support for people in distress, crisis counseling, and suicide prevention.",
+                        website: "https://988lifeline.org",
+                        phone: "988",
+                        address: "24/7 Hotline"
+                    },
+                    {
+                        name: "Washtenaw County Community Mental Health",
+                        desc: "24/7 crisis line, emergency psychiatric services, and mental health support.",
+                        website: "https://www.washtenaw.org/1129/Community-Mental-Health",
+                        phone: "(734) 544-3050",
+                        address: "555 Towner St, Ypsilanti, MI 48198"
+                    },
+                    {
+                        name: "Crisis Text Line",
+                        desc: "Free 24/7 text-based crisis support - text HOME to 741741 from anywhere in the US.",
+                        website: "https://www.crisistextline.org",
+                        phone: "Text HOME to 741741",
+                        address: "Text Service"
+                    },
+                    {
+                        name: "NAMI Washtenaw Helpline",
+                        desc: "Mental health information, support, and resource referrals for individuals and families.",
+                        website: "https://www.namiwashtenaw.org",
+                        phone: "(734) 994-6611",
+                        address: "Phone support and virtual services"
+                    }
+                ],
+                therapist: [
+                    {
+                        name: "Psychology Today - Ann Arbor Therapists",
+                        desc: "Searchable directory of licensed therapists, psychiatrists, and counselors in Ann Arbor.",
+                        website: "https://www.psychologytoday.com/us/therapists/mi/ann-arbor",
+                        phone: "",
+                        address: "Online Directory"
+                    },
+                    {
+                        name: "SRN Counseling Services",
+                        desc: "Affordable outpatient mental health and substance abuse counseling with sliding scale fees.",
+                        website: "https://www.srncounseling.org",
+                        phone: "(734) 485-8730",
+                        address: "1200 N Huron River Dr, Ypsilanti, MI 48197"
+                    },
+                    {
+                        name: "Growth Works Counseling",
+                        desc: "Individual and family therapy services accepting Medicaid and offering affordable rates.",
+                        website: "https://www.growthworks.com",
+                        phone: "(734) 996-3100",
+                        address: "2929 Plymouth Rd, Ann Arbor, MI 48105"
+                    }
+                ],
+                support: [
+                    {
+                        name: "NAMI Washtenaw Support Groups",
+                        desc: "Free peer support groups for individuals living with mental illness and their families.",
+                        website: "https://www.namiwashtenaw.org/support",
+                        phone: "(734) 994-6611",
+                        address: "Various locations in Washtenaw County"
+                    },
+                    {
+                        name: "Depression and Bipolar Support Alliance (DBSA)",
+                        desc: "Peer-led support groups for people living with depression, bipolar disorder, and related conditions.",
+                        website: "https://www.dbsalliance.org",
+                        phone: "",
+                        address: "Virtual and in-person meetings"
+                    },
+                    {
+                        name: "Alcoholics Anonymous - Ann Arbor",
+                        desc: "Free support group meetings for individuals recovering from alcohol addiction.",
+                        website: "https://www.aa.org",
+                        phone: "(734) 669-4072",
+                        address: "Multiple meeting locations daily"
+                    },
+                    {
+                        name: "Narcotics Anonymous - Washtenaw Area",
+                        desc: "Peer support meetings for individuals in recovery from drug addiction.",
+                        website: "https://www.na.org",
+                        phone: "(734) 327-3447",
+                        address: "Multiple meeting locations"
+                    }
+                ],
+                umich: [
+                    {
+                        name: "U-M Counseling and Psychological Services (CAPS)",
+                        desc: "Mental health services for U-M students including crisis intervention and ongoing counseling.",
+                        website: "https://caps.umich.edu",
+                        phone: "(734) 764-8312",
+                        address: "3100 Michigan Union, Ann Arbor, MI 48109"
+                    },
+                    {
+                        name: "U-M Psychiatric Emergency Services",
+                        desc: "24/7 emergency psychiatric care for U-M students and the community.",
+                        website: "https://www.uofmhealth.org/psychiatry/emergency",
+                        phone: "(734) 936-5900",
+                        address: "1500 E Medical Center Dr, Ann Arbor, MI 48109"
+                    },
+                    {
+                        name: "U-M Wolverine Wellness",
+                        desc: "Health promotion programs including stress management and mindfulness resources.",
+                        website: "https://wolverinewellness.umich.edu",
+                        phone: "(734) 763-1320",
+                        address: "1000 Oakbrook Dr, Ann Arbor, MI 48109"
+                    }
+                ]
+            },
+            needs: {
+                food: [
+                    {
+                        name: "Food Gatherers",
+                        desc: "Food rescue and distribution organization - find local food pantries and hot meal programs.",
+                        website: "https://www.foodgatherers.org",
+                        phone: "(734) 761-2796",
+                        address: "1 Carrot Way, Ann Arbor, MI 48105"
+                    },
+                    {
+                        name: "St. Andrew's Supper",
+                        desc: "Free hot meals served every evening - no questions asked, all are welcome.",
+                        website: "https://www.standrewssupper.org",
+                        phone: "(734) 662-9797",
+                        address: "306 N Division St, Ann Arbor, MI 48104"
+                    },
+                    {
+                        name: "SOS Community Services Food Pantry",
+                        desc: "Emergency food assistance and supplemental food programs for Ypsilanti area residents.",
+                        website: "https://www.soscs.org",
+                        phone: "(734) 482-8857",
+                        address: "111 N River St, Ypsilanti, MI 48198"
+                    },
+                    {
+                        name: "Avalon Housing Food Pantry",
+                        desc: "Weekly food distributions for community members in need.",
+                        website: "https://www.avalonhousing.org",
+                        phone: "(734) 663-5858",
+                        address: "1327 Jones Dr, Ann Arbor, MI 48105"
+                    }
+                ],
+                snap: [
+                    {
+                        name: "Michigan DHHS - SNAP Application",
+                        desc: "Apply for SNAP (food stamps), cash assistance, and Medicaid benefits online or in person.",
+                        website: "https://www.michigan.gov/mdhhs/assistance/food",
+                        phone: "1-855-275-6424",
+                        address: "Apply online at MI Bridges"
+                    },
+                    {
+                        name: "WIC Program - Washtenaw County",
+                        desc: "Nutrition assistance for pregnant women, new mothers, and children under 5.",
+                        website: "https://www.washtenaw.org/290/WIC",
+                        phone: "(734) 544-6700",
+                        address: "555 Towner St, Ypsilanti, MI 48198"
+                    },
+                    {
+                        name: "Community Action Network - SNAP Outreach",
+                        desc: "Free help applying for SNAP benefits and maximizing your food assistance.",
+                        website: "https://www.canwashtenaw.org",
+                        phone: "(734) 971-9781",
+                        address: "123 W Michigan Ave, Ypsilanti, MI 48197"
+                    }
+                ],
+                clothing: [
+                    {
+                        name: "Kiwanis Thrift Sale",
+                        desc: "Affordable clothing, household items, and furniture - proceeds support local charities.",
+                        website: "https://www.a2kiwanis.org/thrift-sale",
+                        phone: "(734) 665-0450",
+                        address: "100 N Staebler Rd, Ann Arbor, MI 48103"
+                    },
+                    {
+                        name: "PTO Thrift Shop",
+                        desc: "Low-cost clothing, furniture, and household goods - supporting local schools.",
+                        website: "https://www.ptothriftshop.org",
+                        phone: "(734) 662-6263",
+                        address: "2280 S Industrial Hwy, Ann Arbor, MI 48104"
+                    },
+                    {
+                        name: "Goodwill - Ann Arbor",
+                        desc: "Affordable clothing, furniture, and household items with frequent sales and discounts.",
+                        website: "https://www.goodwillannarbor.org",
+                        phone: "(734) 769-4333",
+                        address: "2655 Plymouth Rd, Ann Arbor, MI 48105"
+                    },
+                    {
+                        name: "Salvation Army Family Store",
+                        desc: "Discounted clothing, furniture, and household goods - vouchers available for those in need.",
+                        website: "https://www.salvationarmywashtenaw.org",
+                        phone: "(734) 572-3060",
+                        address: "100 E Michigan Ave, Ypsilanti, MI 48198"
+                    }
+                ]
+            }
+        };
+
+        // Bookmarks storage
+        let bookmarks = JSON.parse(localStorage.getItem('annarbor-help-bookmarks') || '[]');
+
+        // Function to create a resource card with enhanced features
+        function createResourceCard(resource, isSponsored = false, isCrisis = false) {
+            const resourceId = resource.name.replace(/\s+/g, '-').toLowerCase();
+            const isBookmarked = bookmarks.includes(resourceId);
+
+            const cardClass = isSponsored ? 'sponsored-card text-white' : 'bg-white';
+            const textClass = isSponsored ? 'text-white' : 'text-gray-600';
+            const headingClass = isSponsored ? 'text-white' : 'text-gray-900';
+            const btnClass = isSponsored ? 'bg-white text-purple-700 hover:bg-gray-100' : 'bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800';
+            const crisisClass = isCrisis ? 'crisis-card border-2 border-red-400' : '';
+
+            const sponsoredBadge = isSponsored ? '<span class="inline-block bg-yellow-400 text-gray-900 text-xs font-bold px-3 py-1 rounded-full mb-3">✨ SPONSORED</span>' : '';
+            const crisisBadge = isCrisis ? '<span class="inline-block bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-3">🚨 CRISIS SUPPORT</span>' : '';
+
+            // Quick action buttons
+            const quickActions = [];
+
+            // Copy phone button
+            if (resource.phone) {
+                const cleanPhone = resource.phone.replace(/[^0-9]/g, '');
+                quickActions.push(`
+                    <button onclick="copyPhone('${cleanPhone}', '${resource.phone}', event)"
+                            class="quick-action flex items-center space-x-1 text-sm"
+                            title="Copy phone number">
+                        <span>📋</span>
+                        <span class="copy-text">Copy</span>
+                    </button>
+                `);
+            }
+
+            // Share button
+            quickActions.push(`
+                <button onclick="shareResource('${resource.name}', '${resource.website || ''}')"
+                        class="quick-action flex items-center space-x-1 text-sm"
+                        title="Share this resource">
+                    <span>↗️</span>
+                    <span>Share</span>
+                </button>
+            `);
+
+            // Bookmark button
+            quickActions.push(`
+                <button onclick="toggleBookmark('${resourceId}', event)"
+                        class="bookmark-btn quick-action text-xl ${isBookmarked ? 'bookmarked' : ''}"
+                        title="${isBookmarked ? 'Remove bookmark' : 'Bookmark this'}">
+                    ${isBookmarked ? '❤️' : '🤍'}
+                </button>
+            `);
+
+            const websiteButton = resource.website ? `
+                <a href="${resource.website}" target="_blank" rel="noopener noreferrer"
+                   class="${btnClass} inline-block px-5 py-3 rounded-lg font-semibold btn-transition focus:outline-none focus:ring-2 focus:ring-offset-2 shadow-md text-center">
+                    Visit Website →
+                </a>
+            ` : '';
+
+            const phoneButton = resource.phone ? `
+                <a href="tel:${resource.phone.replace(/[^0-9]/g, '')}"
+                   class="inline-block px-5 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold btn-transition focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 shadow-md text-center">
+                    📞 Call Now: ${resource.phone}
+                </a>
+            ` : '';
+
+            const address = resource.address ? `
+                <div class="flex items-start space-x-2 mt-3">
+                    <span class="text-lg">📍</span>
+                    <p class="${textClass} text-sm flex-1">${resource.address}</p>
+                </div>
+            ` : '';
+
+            return `
+                <div class="${cardClass} ${crisisClass} rounded-xl shadow-lg p-6 card-hover relative" data-resource-name="${resource.name.toLowerCase()}">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            ${sponsoredBadge}
+                            ${crisisBadge}
+                        </div>
+                        <div class="flex space-x-1">
+                            ${quickActions.join('')}
+                        </div>
+                    </div>
+                    <h3 class="${headingClass} text-xl font-bold mb-3">${resource.name}</h3>
+                    <p class="${textClass} mb-4 leading-relaxed">${resource.desc}</p>
+                    <div class="flex flex-col space-y-3">
+                        ${websiteButton}
+                        ${phoneButton}
+                    </div>
+                    ${address}
+                </div>
+            `;
+        }
+
+        // Copy phone number function
+        function copyPhone(cleanPhone, displayPhone, event) {
+            navigator.clipboard.writeText(cleanPhone).then(() => {
+                const btn = event.currentTarget;
+                const textSpan = btn.querySelector('.copy-text');
+                textSpan.textContent = '✓ Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    textSpan.textContent = 'Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Share resource function
+        function shareResource(name, website) {
+            if (navigator.share) {
+                navigator.share({
+                    title: `${name} - Ann Arbor.help`,
+                    text: `Check out this resource: ${name}`,
+                    url: website || window.location.href
+                }).catch(() => {});
+            } else {
+                // Fallback: copy link
+                const textToCopy = website || window.location.href;
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    alert('Link copied to clipboard!');
+                });
+            }
+        }
+
+        // Toggle bookmark function
+        function toggleBookmark(resourceId, event) {
+            const btn = event.currentTarget;
+            const index = bookmarks.indexOf(resourceId);
+
+            if (index > -1) {
+                bookmarks.splice(index, 1);
+                btn.textContent = '🤍';
+                btn.classList.remove('bookmarked');
+                btn.title = 'Bookmark this';
+            } else {
+                bookmarks.push(resourceId);
+                btn.textContent = '❤️';
+                btn.classList.add('bookmarked');
+                btn.title = 'Remove bookmark';
+            }
+
+            localStorage.setItem('annarbor-help-bookmarks', JSON.stringify(bookmarks));
+        }
+
+        // Filter resources function
+        function filterResources(section) {
+            const searchId = section + '-search';
+            const searchInput = document.getElementById(searchId);
+            const searchTerm = searchInput.value.toLowerCase();
+
+            const sectionId = section + '-section';
+            const resourceCards = document.getElementById(sectionId).querySelectorAll('[data-resource-name]');
+
+            resourceCards.forEach(card => {
+                const resourceName = card.getAttribute('data-resource-name');
+                const cardText = card.textContent.toLowerCase();
+
+                if (cardText.includes(searchTerm)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Function to render resources into containers
+        function renderResources() {
+            // Housing resources
+            document.getElementById('shelters-container').innerHTML =
+                resources.housing.shelters.map(r => createResourceCard(r)).join('');
+            document.getElementById('legal-container').innerHTML =
+                resources.housing.legal.map(r => createResourceCard(r)).join('');
+            document.getElementById('rentals-container').innerHTML =
+                resources.housing.rentals.map(r => createResourceCard(r)).join('');
+            document.getElementById('utilities-container').innerHTML =
+                resources.housing.utilities.map(r => createResourceCard(r)).join('');
+
+            // Mental Health resources (crisis hotlines marked as crisis, sponsored first in therapist)
+            document.getElementById('crisis-container').innerHTML =
+                resources.mentalHealth.crisis.map(r => createResourceCard(r, false, true)).join('');
+
+            const therapistCards = [
+                ...resources.mentalHealth.sponsored.map(r => createResourceCard(r, true)),
+                ...resources.mentalHealth.therapist.map(r => createResourceCard(r))
+            ].join('');
+            document.getElementById('therapist-container').innerHTML = therapistCards;
+
+            document.getElementById('support-container').innerHTML =
+                resources.mentalHealth.support.map(r => createResourceCard(r)).join('');
+            document.getElementById('umich-container').innerHTML =
+                resources.mentalHealth.umich.map(r => createResourceCard(r)).join('');
+
+            // Food & Basic Needs resources
+            document.getElementById('food-container').innerHTML =
+                resources.needs.food.map(r => createResourceCard(r)).join('');
+            document.getElementById('snap-container').innerHTML =
+                resources.needs.snap.map(r => createResourceCard(r)).join('');
+            document.getElementById('clothing-container').innerHTML =
+                resources.needs.clothing.map(r => createResourceCard(r)).join('');
+        }
+
+        // Function to show/hide sections
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = ['home-section', 'housing-section', 'mental-health-section', 'needs-section'];
+            sections.forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+
+            // Show the selected section
+            document.getElementById(sectionId).classList.remove('hidden');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize the page
+        renderResources();
+    </script>
+</body>
+</html>
